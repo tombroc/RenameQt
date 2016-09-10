@@ -52,24 +52,39 @@ bool notEmptyValidator(std::string str)
         return true;
     return false;
 }
-void addSerieForm::processfields()
+void addSerieForm::processFields()
 {
+    string code("");
     for (unsigned i=0;i<fieldList.size();i++)
     {
         // Compute cases : "str", "strlist", "int", "rgx"
-        switch (fieldList[i].getCode())
+        code = fieldList[i].getCode();
+        if (code == "str")
         {
-            case "str":
-                break;
-            case "strlist":
-                break;
-            case "int":
-                break;
-            case "rgx":
-                break;
-            default:
-                break;
+            if (fieldList[i].getMandatory() and !notEmptyValidator(fieldList[i].getValue()))
+                return false;
         }
+        else if (code == "strlist")
+        {
+            if (fieldList[i].getMandatory() and !notEmptyValidator(fieldList[i].getValue()))
+                return false;
+        }
+        else if (code == "int")
+        {
+            if ((fieldList[i].getMandatory() and !notEmptyValidator(fieldList[i].getValue())) or !integerValidator(fieldList[i].getValue()))
+                return false;
+        }
+        else if (code == "rgx")
+        {
+            if (fieldList[i].getMandatory() and !notEmptyValidator(fieldList[i].getValue()))
+                return false;
+        }
+        else
+        {
+            return false;
+        }
+        return true;
+
     }
 }
 
